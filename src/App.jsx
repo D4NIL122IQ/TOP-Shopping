@@ -1,33 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Link } from "react-router-dom";
+import useSWR from 'swr';
+import { Github } from 'lucide-react';
+
+
+
+const fetcher = url => fetch(url).then(reponse => reponse.json());
 
 function App() {
-  const [count, setCount] = useState(0)
+  function Card({article}){
+
+    return (
+        <div className="carticledInfinitScroll">
+            <img src={article.image} alt={article.title +"image"} width="70px"  height="80px"/>
+            <div>
+                <h3>{article.title}</h3>
+            </div>
+        </div>
+    )
+  }
+
+  const {data , error} = useSWR("https://fakestoreapi.com/products?limit=5" , fetcher)
+    if(error) {
+        return(
+            <div className="card error">
+                <h4>Erreur lors de la recuperation de données !</h4>
+            </div>
+        )
+    }
+
+    if (!data) {
+        return(
+            <h1>Loading ....</h1>
+        )
+    }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <header>
+        <h2>Arnaque Shopp</h2>
+        <div>
+          <h3><Link to="about">A propos</Link><br /></h3>
+          <h3><Link to="shopp">Boutique</Link></h3>
+        </div>
+      </header>
+
+      
+      <section>
+
+           <>
+            <h2>Bienvenue chez</h2>
+            <h1>Arnaque Shopp</h1>
+            <div>
+              <h2>Voici un avant gout de nos article</h2>
+            
+              <div className='cardContainer'>
+                {data.map((ar,i)=>{
+                    return <Card key={i} article={ar} />
+                })}
+              </div>
+            </div>
+          </>
+
+          <div>
+          </div>
+      </section>
+
+      <footer>
+        <a href="http://github.com/D4NIL122IQ" target="_blank" rel="noopener noreferrer"><Github/> BY Danil gdj</a>
+      </footer>
     </>
   )
 }

@@ -84,7 +84,7 @@ function App() {
               </div>
           </div>
 
-          <div className="imageShop border-fawn border w-1/2">
+          <div className="imageShop border-fawn border-2 w-1/2">
           </div>
       </section>
 
